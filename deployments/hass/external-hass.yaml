@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: hass-external2
+  name: hass-external
   labels:
     app.kubernetes.io/instance: hass
 spec:
