@@ -32,10 +32,10 @@ To simplfy `Helm` install/uninstall:
 https://medium.com/@pczarkowski/easily-install-uninstall-helm-on-rbac-kubernetes-8c3c0e22d0d7
 
 # Validating setup:
-## In order to ensure that layer 2 is setup. Follow this guide:
+### In order to ensure that layer 2 is setup. Follow this guide:
 https://metallb.universe.tf/tutorial/layer2/
 
-## When asked to create ‘example-layer2-config.yaml’ use the following instead:
+### When asked to create ‘example-layer2-config.yaml’ use the following instead:
 
 ```yaml
 apiVersion: v1
