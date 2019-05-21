@@ -14,16 +14,15 @@ kubeadm init -—pod-network-cidr=10.244.0.0/16
 # Deploying Helm:
 Since [`Home Assistant`](https://www.home-assistant.io/) and a few other services have `Helm` charts, install `Helm`.
 
-## Install `GoFish`: https://gofi.sh/index.html#install
+1) Install `GoFish`: https://gofi.sh/index.html#install
 
-## Install Helm:
+1) Install Helm:
 
 ```bash
 gofish install helm
 ```
 
-## Setup ‘tiller’ user at:
-In order to use `Helm` Tiller must be configured
+1) Setup ‘tiller’
 
 https://helm.sh/docs/using_helm/#tiller-and-role-based-access-control
 
