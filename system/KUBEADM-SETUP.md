@@ -26,6 +26,11 @@ gofish install helm
 
 https://helm.sh/docs/using_helm/#tiller-and-role-based-access-control
 
+Please note, this has been built with versions:
+
+kube: v1.14.0
+helm: v2.13.0
+
 # Troubleshooting:
 
 To simplfy `Helm` install/uninstall:
