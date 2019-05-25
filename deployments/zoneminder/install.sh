@@ -39,7 +39,6 @@ sed -i "s/\(user: \)\(.*\)/\1\"${MYSQL_USER}\"/" app/values.yaml
 sed -i "s/\(mysqlUser:\)\(.*\)/\1 ${MYSQL_USER}/" mysql/values.yaml
 
 MYSQL_USER_PASSWORD=$(date +%s | sha256sum | base64 | head -c 32 ; echo)
-MYSQL_USER_PASSWORD=zmpass
 sed -i "s/\(password: \)\(.*\)/\1\"${MYSQL_USER_PASSWORD}\"/" app/values.yaml
 sed -i "s/\(mysqlPassword:\)\(.*\)/\1 ${MYSQL_USER_PASSWORD}/" mysql/values.yaml
 
