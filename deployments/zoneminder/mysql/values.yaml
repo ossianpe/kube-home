@@ -15,7 +15,7 @@ testFramework:
 ## Specify password for root user
 ##
 ## Default: random 10 character string
-mysqlRootPassword: sHkxx77lKV
+mysqlRootPassword: NGEyM2Q0MGI3MWM3ZjdiMDYzN2UwMzJi
 
 ## Create a database user
 ##
@@ -106,17 +106,17 @@ securityContext:
 ##
 resources:
   requests:
-    memory: 256Mi
-    cpu: 100m
+    memory: 512Mi
+    cpu: 500m
 
 # Custom mysql configuration files path
 configurationFilesPath: /etc/mysql/conf.d/
 
 # Custom mysql configuration files used to override default mysql settings
-configurationFiles: {}
-#  mysql.cnf: |-
-#    [mysqld]
-#    skip-name-resolve
+configurationFiles:
+  mysql.cnf: |-
+    [mysqld]
+    skip-name-resolve
 #    ssl-ca=/ssl/ca.pem
 #    ssl-cert=/ssl/server-cert.pem
 #    ssl-key=/ssl/server-key.pem
@@ -197,5 +197,5 @@ podLabels: {}
 initContainer:
   resources:
     requests:
-      memory: 10Mi
-      cpu: 10m
+      memory: 512Mi
+      cpu: 500m

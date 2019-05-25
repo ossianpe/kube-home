@@ -9,7 +9,8 @@ if [ "$command" == 'y' ]; then
   read command2
   if [ "$command2" == 'y' ]; then
     kubectl delete pv zm-mysql
-    zm_mysql_path='/mnt/zoneminder/mysql'
+
+    zm_mysql_path='/mnt/zoneminder'
     rm -rf "${zm_mysql_path}"
     echo "Deleted data in ${zm_mysql_path}"
   fi
