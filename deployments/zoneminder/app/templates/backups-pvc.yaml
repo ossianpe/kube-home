@@ -1,0 +1,28 @@
+{{- if and .Values.persistence.backups.enabled (not .Values.persistence.backups.existingClaim) }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ template "zoneminder.fullname" . }}-backups
+  labels:
+    app: {{ template "zoneminder.name" . }}
+    chart: {{ template "zoneminder.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+  {{- with .Values.persistence.annotations  }}
+  annotations:
+{{ toYaml . | indent 4 }}
+  {{- end }}
+spec:
+  accessModes:
+  - {{ .Values.persistence.backups.accessMode | quote }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.backups.size | quote }}
+{{- if .Values.persistence.backups.storageClass }}
+{{- if (eq "-" .Values.persistence.backups.storageClass) }}
+  storageClassName: ""
+  {{- else }}
+  storageClassName: "{{ .Values.persistence.backups.storageClass }}"
+{{- end }}
+{{- end }}
+{{- end -}}
