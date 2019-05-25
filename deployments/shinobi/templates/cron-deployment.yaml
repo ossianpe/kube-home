@@ -1,0 +1,52 @@
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: {{ template "shinobi.fullname" . }}-cron
+  labels:
+    app: {{ template "shinobi.name" . }}-cron
+    chart: {{ template "shinobi.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ template "shinobi.name" . }}-cron
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ template "shinobi.name" . }}-cron
+        release: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}-cron
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args: ["node", "cron.js"]
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+          volumeMounts:
+            - name: shinobi-cron-config
+              mountPath: /etc/shinobi/config
+            - name: shinobi-app-videos
+              mountPath: /opt/shinobi/videos
+      volumes:
+        - name: shinobi-cron-config
+          configMap: 
+            name: {{ template "shinobi.fullname" . }}-cron-configuration
+        - name: shinobi-app-videos
+          persistentVolumeClaim:
+            claimName: {{ template "shinobi.fullname" . }}-videos
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}

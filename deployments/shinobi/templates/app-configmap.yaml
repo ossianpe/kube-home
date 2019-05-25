@@ -1,0 +1,46 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "shinobi.fullname" . }}-configuration
+data:
+  {{- with .Values.shinobi.app.super}}
+  super.json: |-
+    [
+        {
+            "mail": {{ .mail | quote }},
+            "pass": {{ .spass | quote }}
+        }
+    ]
+  {{- end }}
+  conf.json: |-
+    {
+      "port": 8080,
+      "db": {
+        "host": "{{ template "mysql.fullname" . }}",
+        "user": {{ .Values.mysql.mysqlUser | quote }},
+        "password": {{ .Values.mysql.mysqlPassword | quote }},
+        "database": {{ .Values.mysql.mysqlDatabase | quote }},
+        "port": {{ .Values.mysql.service.port }}
+      },
+      {{- with .Values.shinobi.app.conf.mail }}
+      "mail":{
+        "service": {{ .service | quote }},
+        "auth": {
+          "user": {{ .auth.user | quote }},
+          "pass": {{ .auth.pass | quote }}
+        }
+      },
+      {{- end }}
+      {{- with .Values.shinobi.app.conf.cron }}
+      "cron":{
+          "key": {{ .key | quote }}
+      },
+      {{- end }}
+      {{- with .Values.shinobi.app.conf.pluginKeys }}
+      "pluginKeys":{
+          "Motion": {{ .Motion | quote }},
+          "OpenCV": {{ .OpenCV | quote }},
+          "OpenALPR": {{ .OpenALPR | quote }}
+      }
+      {{- end }}
+    }

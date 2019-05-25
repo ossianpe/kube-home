@@ -1,0 +1,187 @@
+# Default values for shinobi.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: neatori18/shinobi
+  tag: 20180711_80260b07
+  pullPolicy: IfNotPresent
+
+service:
+  type: LoadBalancer
+  ip: 192.168.29.187
+  port: 80
+
+ingress:
+  enabled: true
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  path: /
+  hosts:
+    - shinobi.local
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #  cpu: 100m
+  #  memory: 128Mi
+  # requests:
+  #  cpu: 100m
+  #  memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+## Persist data to a persistent volume
+persistence:
+  enabled: true
+  ## Video data Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  storageClass: "shinobi-data"
+  accessMode: ReadWriteOnce
+  size: 10Gi
+
+shinobi:
+  app:
+    super:
+      mail: admin@shinobi.video
+      spass: 21232f297a57a5a743894a0e4a801fc3
+    conf:
+      mail:
+        service: gmail
+        auth:
+          user: your_email@gmail.com
+          pass: your_password_or_app_specific_password
+      cron:
+        key: e1cc2af29acbdae34393e73102f94f65
+      pluginKeys:
+        Motion: a48b2b7b8e6f6d25b9c8463af5e0560a
+        OpenCV: ee252ff3087e166219fd5434cefc9ba1
+        OpenALPR: fd42e6d1c8f127df84b55190ade53527
+
+## MySQL chart configuration
+mysql:
+  service:
+    port: 3306
+  mysqlDatabase: ccio
+#  mysqlRootPassword: password
+  mysqlUser: majesticflame
+  mysqlPassword: MTgyZDIyMWViODQzNDAwZDE1OTEyOTNi
+  persistence:
+    enabled: true
+    storageClass: shinobi-mysql
+    accessMode: ReadWriteOnce
+    size: 8Gi
+  configurationFiles: {}
+  initializationFiles: 
+    10_framework.sql: |-
+      CREATE DATABASE IF NOT EXISTS `ccio` /*!40100 DEFAULT CHARACTER SET utf8mb4 */;
+      USE `ccio`;
+
+      -- Dumping structure for table ccio.API
+      CREATE TABLE IF NOT EXISTS `API` (
+        `ke` varchar(50) DEFAULT NULL,
+        `uid` varchar(50) DEFAULT NULL,
+        `ip` tinytext,
+        `code` varchar(100) DEFAULT NULL,
+        `details` text,
+        `time` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+      -- Data exporting was unselected.
+      -- Dumping structure for table ccio.Events
+      CREATE TABLE IF NOT EXISTS `Events` (
+        `ke` varchar(50) DEFAULT NULL,
+        `mid` varchar(50) DEFAULT NULL,
+        `details` text,
+        `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+
+      -- Data exporting was unselected.
+      -- Dumping structure for table ccio.Logs
+      CREATE TABLE IF NOT EXISTS `Logs` (
+        `ke` varchar(50) DEFAULT NULL,
+        `mid` varchar(50) DEFAULT NULL,
+        `info` text,
+        `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+      -- Data exporting was unselected.
+      -- Dumping structure for table ccio.Monitors
+      CREATE TABLE IF NOT EXISTS `Monitors` (
+        `mid` varchar(50) DEFAULT NULL,
+        `ke` varchar(50) DEFAULT NULL,
+        `name` varchar(50) DEFAULT NULL,
+        `shto` text,
+        `shfr` text,
+        `details` longtext,
+        `type` varchar(50) DEFAULT 'jpeg',
+        `ext` varchar(50) DEFAULT 'webm',
+        `protocol` varchar(50) DEFAULT 'http',
+        `host` varchar(100) DEFAULT '0.0.0.0',
+        `path` varchar(100) DEFAULT '/',
+        `port` int(8) DEFAULT '80',
+        `fps` int(8) DEFAULT '1',
+        `mode` varchar(15) DEFAULT NULL,
+        `width` int(11) DEFAULT '640',
+        `height` int(11) DEFAULT '360'
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+      -- Data exporting was unselected.
+      -- Dumping structure for table ccio.Presets
+      CREATE TABLE IF NOT EXISTS `Presets` (
+        `ke` varchar(50) DEFAULT NULL,
+        `name` text,
+        `details` text,
+        `type` enum('monitor','event','user') DEFAULT NULL
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+      -- Data exporting was unselected.
+      -- Dumping structure for table ccio.Users
+      CREATE TABLE IF NOT EXISTS `Users` (
+        `ke` varchar(50) DEFAULT NULL,
+        `uid` varchar(50) DEFAULT NULL,
+        `auth` varchar(50) DEFAULT NULL,
+        `mail` varchar(100) DEFAULT NULL,
+        `pass` varchar(100) DEFAULT NULL,
+        `details` longtext,
+        UNIQUE KEY `mail` (`mail`)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+      -- Data exporting was unselected.
+      -- Dumping structure for table ccio.Videos
+      CREATE TABLE IF NOT EXISTS `Videos` (
+        `mid` varchar(50) DEFAULT NULL,
+        `ke` varchar(50) DEFAULT NULL,
+        `ext` enum('webm','mp4') DEFAULT NULL,
+        `time` timestamp NULL DEFAULT NULL,
+        `duration` float DEFAULT NULL,
+        `size` float DEFAULT NULL,
+        `frames` int(11) DEFAULT NULL,
+        `end` timestamp NULL DEFAULT NULL,
+        `status` int(1) DEFAULT '0' COMMENT '0:Building,1:Complete,2:Read,3:Archive',
+        `details` text
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    20_user.sql: |-
+      CREATE USER 'majesticflame'@'%' IDENTIFIED BY '';
+      GRANT ALL PRIVILEGES ON ccio.* TO 'majesticflame'@'shinobi-app';
+      FLUSH PRIVILEGES;
+

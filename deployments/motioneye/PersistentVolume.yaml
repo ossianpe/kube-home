@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: motioneye-config
+spec:
+  capacity:
+    storage: 100Mi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/motioneye"
+  storageClassName: motioneye-config
+
+---
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: motioneye-gravacoes
+spec:
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/pihole/data"
+  storageClassName: motioneye-gravacoes

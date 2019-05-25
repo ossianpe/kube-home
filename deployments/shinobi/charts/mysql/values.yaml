@@ -4,24 +4,16 @@
 image: "mysql"
 imageTag: "5.7.14"
 
-busybox:
-  image: "busybox"
-  tag: "1.29.3"
-
-testFramework:
-  image: "dduportal/bats"
-  tag: "0.4.0"
-
 ## Specify password for root user
 ##
 ## Default: random 10 character string
-mysqlRootPassword: NGEyM2Q0MGI3MWM3ZjdiMDYzN2UwMzJi
+# mysqlRootPassword: testing
 
 ## Create a database user
 ##
-mysqlUser: zmuser
+# mysqlUser:
 ## Default: random 10 character string
-mysqlPassword: zmpass
+# mysqlPassword:
 
 ## Allow unauthenticated access, uncomment to enable
 ##
@@ -29,27 +21,13 @@ mysqlPassword: zmpass
 
 ## Create a database
 ##
-mysqlDatabase: zm
+# mysqlDatabase:
 
 ## Specify an imagePullPolicy (Required)
 ## It's recommended to change this to 'Always' if the image tag is 'latest'
 ## ref: http://kubernetes.io/docs/user-guide/images/#updating-images
 ##
 imagePullPolicy: IfNotPresent
-
-extraVolumes: |
-  # - name: extras
-  #   emptyDir: {}
-
-extraVolumeMounts: |
-  # - name: extras
-  #   mountPath: /usr/share/extras
-  #   readOnly: true
-
-extraInitContainers: |
-  # - name: do-something
-  #   image: busybox
-  #   command: ['do', 'something']
 
 # Optionally specify an array of imagePullSecrets.
 # Secrets must be manually created in the namespace.
@@ -60,11 +38,6 @@ extraInitContainers: |
 ## Node selector
 ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
 nodeSelector: {}
-
-## Tolerations for pod assignment
-## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-##
-tolerations: []
 
 livenessProbe:
   initialDelaySeconds: 30
@@ -90,16 +63,9 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  storageClass: "zoneminder-mysql"
+  # storageClass: "-"
   accessMode: ReadWriteOnce
   size: 8Gi
-  annotations: {}
-
-## Security context
-securityContext:
-  enabled: false
-  runAsUser: 999
-  fsGroup: 999
 
 ## Configure resource requests and limits
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
@@ -109,14 +75,11 @@ resources:
     memory: 256Mi
     cpu: 100m
 
-# Custom mysql configuration files path
-configurationFilesPath: /etc/mysql/conf.d/
-
 # Custom mysql configuration files used to override default mysql settings
-configurationFiles:
-  mysql.cnf: |-
-    [mysqld]
-    skip-name-resolve
+configurationFiles: {}
+#  mysql.cnf: |-
+#    [mysqld]
+#    skip-name-resolve
 #    ssl-ca=/ssl/ca.pem
 #    ssl-cert=/ssl/server-cert.pem
 #    ssl-key=/ssl/server-key.pem
@@ -137,27 +100,15 @@ metrics:
   annotations: {}
     # prometheus.io/scrape: "true"
     # prometheus.io/port: "9104"
-  livenessProbe:
-    initialDelaySeconds: 15
-    timeoutSeconds: 5
-  readinessProbe:
-    initialDelaySeconds: 5
-    timeoutSeconds: 1
-  flags: []
-  serviceMonitor:
-    enabled: false
-    additionalLabels: {}
 
 ## Configure the service
 ## ref: http://kubernetes.io/docs/user-guide/services/
 service:
-  annotations: {}
   ## Specify a service type
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services---service-types
   type: ClusterIP
   port: 3306
   # nodePort: 32000
-  # loadBalancerIP:
 
 ssl:
   enabled: false
@@ -176,26 +127,3 @@ ssl:
 #      -----BEGIN RSA PRIVATE KEY-----
 #      ...
 #      -----END RSA PRIVATE KEY-----
-
-## Populates the 'TZ' system timezone environment variable
-## ref: https://dev.mysql.com/doc/refman/5.7/en/time-zone-support.html
-##
-## Default: nil (mysql will use image's default timezone, normally UTC)
-## Example: 'Australia/Sydney'
-# timezone:
-
-# To be added to the database server pod(s)
-podAnnotations: {}
-
-podLabels: {}
-
-## Set pod priorityClassName
-# priorityClassName: {}
-
-
-## Init container resources defaults
-initContainer:
-  resources:
-    requests:
-      memory: 256Mi
-      cpu: 100m
