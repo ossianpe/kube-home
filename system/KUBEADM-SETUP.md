@@ -29,6 +29,14 @@ This guide describes how to standup a single node `Kubernetes` cluster running `
 
 ### Fix loopback issue
 
+1) Edit `coredns` configmap 
+    ```bash
+    kubectl -n kube-system edit configmap coredns
+    ```
+   Remove line that includes the word `loop`
+   
+   Wait for change to propogate through to `coredns` pods
+
 # Deploying Helm:
 Since [`Home Assistant`](https://www.home-assistant.io/) and a few other services have `Helm` charts, install `Helm`.
 
