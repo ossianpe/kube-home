@@ -12,7 +12,8 @@ image:
 strategyType: Recreate
 
 service:
-  type: ClusterIP
+  type: LoadBalancer
+  loadBalancerIP: 192.168.29.100
   port: 8123
   annotations: {}
   labels: {}
@@ -49,11 +50,11 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  # storageClass: "-"
+  storageClass: home-assistant
   ##
   ## If you want to reuse an existing claim, you can pass the name of the PVC using
   ## the existingClaim variable
-  existingClaim: home-assistant-pvc
+  # existingClaim: home-assistant
   accessMode: ReadWriteOnce
   size: 25Gi
 

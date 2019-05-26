@@ -1,14 +1,14 @@
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: home-assistant-pv
+  name: home-assistant
   labels:
     type: local
 spec:
-  storageClassName: ha
+  storageClassName: home-assistant
   capacity:
     storage: 50Gi
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/mnt/kube_data"
+    path: "/mnt/home-assistant"
