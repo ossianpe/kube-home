@@ -1,10 +1,9 @@
-# Zoneminder
+# Shinobi
 
 ### Install with:
 
-Install zoneminder + mysqldb
 ```
-cd deployments/zoneminder
+cd deployments/shinobi
 ./install.sh
 ```
 
@@ -17,7 +16,6 @@ Please note, root password is generated randomly with each install
 
 ### Uninstall with:
 
-Install zoneminder + mysqldb
 ```
 cd deployments/zoneminder
 ./install.sh
