@@ -2,7 +2,6 @@
 
 ### Install with:
 
-Install prometheus
 ```
 cd deployments/prometheus
 ./install.sh
