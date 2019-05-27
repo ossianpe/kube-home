@@ -57,7 +57,7 @@ persistence:
   ##
   storageClass: "shinobi-data"
   accessMode: ReadWriteOnce
-  size: 10Gi
+  size: 600Gi
 
 shinobi:
   app:
@@ -71,11 +71,11 @@ shinobi:
           user: your_email@gmail.com
           pass: your_password_or_app_specific_password
       cron:
-        key: e1cc2af29acbdae34393e73102f94f65
+        key: 5b72a1d124c547f5d3da38cf68225f4c
       pluginKeys:
-        Motion: a48b2b7b8e6f6d25b9c8463af5e0560a
-        OpenCV: ee252ff3087e166219fd5434cefc9ba1
-        OpenALPR: fd42e6d1c8f127df84b55190ade53527
+        Motion: c7ca713a1a41d719f8e5550cf590198e
+        OpenCV: 1cdcf6d18fc4f8bdd85a0b8b46fb268e
+        OpenALPR: 8292cace64588f0f04dcddf26335a055
 
 ## MySQL chart configuration
 mysql:
@@ -89,7 +89,7 @@ mysql:
     enabled: true
     storageClass: shinobi-mysql
     accessMode: ReadWriteOnce
-    size: 8Gi
+    size: 350Gi
   configurationFiles: {}
   initializationFiles: 
     10_framework.sql: |-

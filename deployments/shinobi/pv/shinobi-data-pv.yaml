@@ -5,8 +5,8 @@ metadata:
 spec:
   storageClassName: shinobi-data
   capacity:
-    storage: 10Gi
+    storage: 600Gi
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/mnt/shinobi/data"
+    path: "/mnt/video/shinobi/data"
