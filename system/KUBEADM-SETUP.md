@@ -124,6 +124,17 @@ data:
 End
 ```
 
+### CoreDNS 'OOMKilled' crashes
+If core DNS continues to be killed due to 'OOMKilled' (when it clearly has enough memory) and additionally reports `Exit Code: 137` extend the `Liveness` and `Readiness` checks to `30` seconds to avoid race condition:
+
+```bash
+kubectl -n kube-system edit deployment coredns
+```
+
+See the following link for more information:
+
+https://github.com/kubernetes/kubernetes/issues/62594
+
 # References
 
 ### Installing `Kubernetes`
