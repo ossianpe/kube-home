@@ -81,7 +81,9 @@ In order to resolve this perform the following steps:
     systemctl restart kubelet
     ```
 
-#### Update `CoreDNS` to `1.5.0`
+Follow the next subsection for updating `CoreDNS`
+
+##### Update `CoreDNS` to `1.5.0`
 It appears the version of `CoreDNS` that comes with `kubeadmin` version `1.14` has an issue with loading overridden `resolvConf:` in the `kubelet` config file (like what was outlined in the previous section). In order address this, `CoreDNS` must be updated to a later version.
 
 1) Edit the `CoreDNS` deployment:
