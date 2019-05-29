@@ -215,3 +215,6 @@ https://helm.sh/docs/using_helm/#tiller-and-role-based-access-control
 
 ### Installing `MetalLB`
 https://metallb.universe.tf/tutorial/layer2/
+
+### Fix `CoreDNS` on `ClearOS`
+https://stackoverflow.com/questions/52645473/coredns-fails-to-run-in-kubernetes-cluster?rq=1
