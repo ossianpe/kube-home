@@ -5,7 +5,7 @@ metadata:
 spec:
   storageClassName: shinobi-mysql
   capacity:
-    storage: 350Gi
+    storage: 150Gi
   accessModes:
     - ReadWriteOnce
   hostPath:

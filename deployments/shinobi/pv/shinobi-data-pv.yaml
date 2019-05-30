@@ -5,7 +5,7 @@ metadata:
 spec:
   storageClassName: shinobi-data
   capacity:
-    storage: 600Gi
+    storage: 800Gi
   accessModes:
     - ReadWriteOnce
   hostPath:

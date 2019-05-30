@@ -128,7 +128,7 @@ spec:
                   name: {{ template "home-assistant.fullname" . }}-configurator
                   key: hass-api-password
             {{- end }}
-            {{- if (.Values.configurator.username) and (.Values.configurator.password) }}
+            {{- if (.Values.configurator.configurator_username) and (.Values.configurator.configurator_password) }}
             - name: HC_USERNAME
               valueFrom:
                 secretKeyRef:

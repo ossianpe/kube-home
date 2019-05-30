@@ -57,13 +57,13 @@ persistence:
   ##
   storageClass: "shinobi-data"
   accessMode: ReadWriteOnce
-  size: 600Gi
+  size: 800Gi
 
 shinobi:
   app:
     super:
       mail: admin@shinobi.video
-      spass: 21232f297a57a5a743894a0e4a801fc3
+      spass: ac3981d4862c57ff0af8b0d7e7c4d11e
     conf:
       mail:
         service: gmail
@@ -84,12 +84,12 @@ mysql:
   mysqlDatabase: ccio
 #  mysqlRootPassword: password
   mysqlUser: majesticflame
-  mysqlPassword: MTgyZDIyMWViODQzNDAwZDE1OTEyOTNi
+  mysqlPassword: 
   persistence:
     enabled: true
     storageClass: shinobi-mysql
     accessMode: ReadWriteOnce
-    size: 350Gi
+    size: 150Gi
   configurationFiles: {}
   initializationFiles: 
     10_framework.sql: |-

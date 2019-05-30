@@ -97,7 +97,7 @@ git:
   keyPath: /root/.ssh
 
 configurator:
-  enabled: false
+  enabled: true
 
   ## hass-configurator container image
   ##
@@ -115,10 +115,10 @@ configurator:
   ## don't allow switching out of the base path
   enforceBasepath: true
   ## username for basic auth for accessing the configurator
-  # username:
+  configurator_username: admin
   ## password (sha256-hash) for basic auth for accessing the configurator
   ## For example "test" would be "{sha256}9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"
-  # password:
+  configurator_password: 
 
   ## Additional hass-configurator container environment variable
   ## For instance to add a http_proxy
@@ -140,6 +140,8 @@ configurator:
 
   service:
     type: ClusterIP
+#    type: LoadBalancer
+    loadBalancerIP: 192.168.29.11
     port: 3218
     annotations: {}
     labels: {}
@@ -156,18 +158,18 @@ configurator:
 # settings has to be enabled in configuration.yaml
 # https://www.home-assistant.io/components/prometheus/
 monitoring:
-  enabled: false
+  enabled: true
   serviceMonitor:
     # When set true and if Prometheus Operator is installed then use a ServiceMonitor to configure scraping
-    enabled: true
+    #  enabled: true
     # Set the namespace the ServiceMonitor should be deployed
-    # namespace: monitoring
+    namespace: monitoring
     # Set how frequently Prometheus should scrape
-    # interval: 30s
+    #  interval: 30s
     # Set path to beats-exporter telemtery-path
-    # telemetryPath: /metrics
+    #  telemetryPath: /metrics
     # Set labels for the ServiceMonitor, use this to define your scrape label for Prometheus Operator
-    # labels:
+    #  labels: hass
 
 vscode:
   enabled: false
