@@ -1,0 +1,7 @@
+apiVersion: v1
+appVersion: "0.10.554.0"
+description: CCTV
+name: kerberos
+version: 0.1.0
+keywords:
+- kerberos
