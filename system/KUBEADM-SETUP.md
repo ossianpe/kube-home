@@ -28,14 +28,87 @@ This guide describes how to standup a single node `Kubernetes` cluster running `
     ```
 
 ### Fix loopback issue
+In some installs `CoreDNS` pods will report `CrashLoopBackOff` with the following `kubectl log ..` error message:
 
-1) Edit `coredns` configmap 
+```
+2019-05-29T21:08:01.525Z [FATAL] plugin/loop: Loop (127.0.0.1:43211 -> :53) detected for zone ".", see https://coredns.io/plugins/loop#troubleshooting. Query: "HINFO 679688347533153169.846261181708532630."
+```
+
+In order to resolve this perform the following steps:
+
+1) Edit `CoreDNS` configmap:
+
     ```bash
     kubectl -n kube-system edit configmap coredns
     ```
-   Remove line that includes the word `loop`
+    
+    Remove line that includes the word `loop`
    
-   Wait for change to propogate through to `coredns` pods
+    Wait for change to propogate through to `coredns` pods
+
+
+### Fix resolv issue (for ClearOS)
+[ClearOS](https://www.clearos.com/) uses a unique `resolv.conf` file for resolutions. The default `/etc/resolv.conf` file contains localhost references which will cause `CoreDNS` pods to be `OOMKilled`. To fix this, follow these steps:
+
+1) Determine location of `kubelet` config file:
+    ```bash
+    ps -ex | grep kubelet
+    ```
+    
+    _Note, this will be the file found immediately after `--config`. In my case it was `/var/lib/kubelet/config.yaml`_
+
+1) Update `resolv.conf` file:
+
+    Identify the line found in the config file (in my case it was `/var/lib/kubelet/config.yaml`):
+    
+    ```bash
+    ...
+    resolvConf: /etc/resolv.conf
+    ...
+    ```
+    
+    Update it to:
+
+    ```bash
+    ...
+    resolvConf: /etc/resolv-peerdns.conf
+    ...
+    ```
+    
+1) Restart `kubelet`:
+
+    ```bash
+    systemctl restart kubelet
+    ```
+
+Follow the next subsection for updating `CoreDNS`
+
+##### Update `CoreDNS` to `1.5.0`
+It appears the version of `CoreDNS` that comes with `kubeadmin` version `1.14` has an issue with loading overridden `resolvConf:` in the `kubelet` config file (like what was outlined in the previous section). In order address this, `CoreDNS` must be updated to a later version.
+
+1) Edit the `CoreDNS` deployment:
+
+    ```bash
+    kubectl edit deployment coredns -n kube-system
+    ```
+    
+    Modify the image from:
+    
+    ```bash
+    ...
+    image: k8s.gcr.io/coredns:1.3.1
+    ...
+    ```
+    
+    To:
+    
+    ```bash
+    ...
+    image: k8s.gcr.io/coredns:1.5.0
+    ...
+    ```
+    
+    Save and wait for `CoreDNS` pods to rebuild.
 
 # Deploying Helm:
 Since [`Home Assistant`](https://www.home-assistant.io/) and a few other services have `Helm` charts, install `Helm`.
@@ -124,6 +197,10 @@ data:
 End
 ```
 
+See the following link for more information:
+
+https://github.com/kubernetes/kubernetes/issues/62594
+
 # References
 
 ### Installing `Kubernetes`
@@ -138,3 +215,6 @@ https://helm.sh/docs/using_helm/#tiller-and-role-based-access-control
 
 ### Installing `MetalLB`
 https://metallb.universe.tf/tutorial/layer2/
+
+### Fix `CoreDNS` on `ClearOS`
+https://stackoverflow.com/questions/52645473/coredns-fails-to-run-in-kubernetes-cluster?rq=1
