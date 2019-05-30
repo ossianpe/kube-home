@@ -1,0 +1,12 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: openvpn
+spec:
+  storageClassName: openvpn
+  capacity:
+    storage: 5M
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/openvpn"
