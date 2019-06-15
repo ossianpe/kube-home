@@ -77,7 +77,7 @@ downloadDashboardsImage:
 ##
 service:
   type: LoadBalancer
-  loadBalancerIP: 192.168.29.195
+  loadBalancerIP: 192.168.29.22
   port: 80
   targetPort: 3000
     # targetPort: 4181 To be used with a proxy extraContainer
@@ -238,7 +238,7 @@ datasources:
     datasources:
     - name: Prometheus
       type: prometheus
-      url: http://192.168.29.199:80
+      url: http://192.168.29.20:80
       access: proxy
       isDefault: true
 

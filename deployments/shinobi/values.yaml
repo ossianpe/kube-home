@@ -11,7 +11,7 @@ image:
 
 service:
   type: LoadBalancer
-  ip: 192.168.29.187
+  ip: 192.168.29.30
   port: 80
 
 ingress:

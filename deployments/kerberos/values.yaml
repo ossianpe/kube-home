@@ -14,7 +14,7 @@ fullnameOverride: ""
 
 service:
   type: LoadBalancer
-  ip: 192.168.29.189
+  ip: 192.168.29.31
   port: 80
 
 ingress:
