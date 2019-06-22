@@ -4,12 +4,10 @@ This guide describes how to standup a single node `Kubernetes` cluster running `
 ## Preflight
 The following must be installed/configured prior:
 
-```
-[docker-ce](INSTALL-DOCKER-CE.md)
-kubeadm
-swap
-iptables
-```
+* [`docker-ce`](INSTALL-DOCKER-CE.md)
+* `kubeadm`
+* `swap`
+* `iptables`
 
 ### Installing `kubeadm`
 
