@@ -5,8 +5,43 @@ This guide describes how to standup a single node `Kubernetes` cluster running `
 The following must be installed/configured prior:
 
 ```
-Docker
+docker-ce
+kubeadm
+swap
+iptables
 ```
+
+### Installing `docker-ce`
+
+1) Install dependencies (may already be installed)
+
+```
+sudo yum install yum-utils \
+  device-mapper-persistent-data \
+  lvm2
+```
+
+1) Setup stable repository
+
+```
+sudo yum-config-manager \
+    --add-repo \
+    https://download.docker.com/linux/centos/docker-ce.repo
+```
+
+1) Install `docker-ce`
+
+```
+sudo yum install docker-ce docker-ce-cli containerd.io
+```
+
+1) Start `docker-ce`
+
+```
+sudo systemctl start docker
+```
+
+### Installing `kubeadm`
 
 `kubeadm` must be installed:
 1) Install the repo
@@ -42,6 +77,8 @@ Docker
     systemctl enable --now kubelet
     ```
 
+### Disable swap
+
 Swap must be disabled
 1) Disable Swap for current runtime
 
@@ -56,6 +93,8 @@ Swap must be disabled
     ```
 
     Comment out line referencing swap
+
+### Modify iptables
 
 Disable `kube` traffic going through `iptables`:
 
@@ -266,6 +305,9 @@ See the following link for more information:
 https://github.com/kubernetes/kubernetes/issues/62594
 
 # References
+
+### Installing `docker-ce`
+https://docs.docker.com/install/linux/docker-ce/centos/
 
 ### Installing `Kubernetes`
 https://kubernetes.io/docs/setup/independent/create-cluster-kubeadm/
