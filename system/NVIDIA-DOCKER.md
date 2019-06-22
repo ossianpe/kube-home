@@ -1,5 +1,5 @@
-# NVIDIA graphics for Kubernetes setup:
-This guide describes how to setup NVIDIA graphics within a single node `Kubernetes` instance
+# NVIDIA graphics for `Docker` setup:
+This guide describes how to setup NVIDIA graphics for `Docker`
 
 ## Setup
 The following must be installed/configured:
