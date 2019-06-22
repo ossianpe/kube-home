@@ -1,10 +1,11 @@
-# NVIDIA graphics for `Docker` setup:
+# NVIDIA graphics runtime for `Docker` setup:
 This guide describes how to setup NVIDIA graphics for `Docker`
 
 ## Setup
 The following must be installed/configured:
 
 ```
+[docker](INSTALL-DOCKER-CE.md)
 NVIDIA Drivers
 NVIDIA Container Runtime for Docker 2
 ```
