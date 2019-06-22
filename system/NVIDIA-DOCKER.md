@@ -5,11 +5,11 @@ This guide describes how to setup NVIDIA graphics for `Docker`
 The following must be installed/configured:
 
 ```
-NVIDIA drivers
+NVIDIA Drivers
 NVIDIA Container Runtime for Docker 2
 ```
 
-#### Installing NVIDIA drivers
+#### Installing NVIDIA Drivers
 Several steps must be performed before installing drivers
 
 1) Install `gcc`
@@ -64,13 +64,27 @@ curl -s -L https://nvidia.github.io/nvidia-docker/centos7/nvidia-docker.repo | \
 1) Install NVIDIA Container Runtime
 
 ```
-sudo yum install nvidia-container-runtime
+sudo yum install nvidia-docker2
 ```
 
-#TODO: Finish this section
+1) Restart the system
+
+```
+sudo shutdown -r now
+```
+
+#### Validate driver installation
+To ensure that the drivers have been installed successfully run
+
+```
+docker run -it --rm --runtime nvidia nvidia/cuda nvidia-smi
+```
 
 # References
 
 ### Installing `NVIDIA` drivers for `Kubernetes`
 https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#pre-installation-actions
 
+### Install NVIDIA Container Runtime for Docker 2
+https://nvidia.github.io/nvidia-docker/
+https://docs.nvidia.com/datacenter/kubernetes/kubernetes-install-guide/index.html#kubernetes-ncrd-install-container-runtime (this is only for Ubuntu..)
