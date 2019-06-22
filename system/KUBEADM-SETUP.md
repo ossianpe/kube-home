@@ -12,6 +12,7 @@ iptables
 ```
 
 ### Installing `docker-ce`
+Please note, installing `docker-ce` is required for getting `NVIDIA` GPU support working
 
 1) Install dependencies (may already be installed)
 
