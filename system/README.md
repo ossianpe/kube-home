@@ -1,4 +1,4 @@
-# Install `Kubernetes` with `NVIDIA` cpu
+# Install `Kubernetes` with `NVIDIA` gpu
 
 ## Setup
 In order to setup a new `kubernetes` instance instance, please follow the order listed below:
