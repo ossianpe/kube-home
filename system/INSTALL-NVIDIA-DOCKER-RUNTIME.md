@@ -4,11 +4,9 @@ This guide describes how to setup NVIDIA graphics for `Docker`
 ## Setup
 The following must be installed/configured:
 
-```
-[docker](INSTALL-DOCKER-CE.md)
-NVIDIA Drivers
-NVIDIA Container Runtime for Docker 2
-```
+* [`docker`](INSTALL-DOCKER-CE.md)
+* `NVIDIA Drivers`
+* `NVIDIA Container Runtime for Docker 2`
 
 #### Installing NVIDIA Drivers
 Several steps must be performed before installing drivers
