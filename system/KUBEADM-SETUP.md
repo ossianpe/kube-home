@@ -1,10 +1,74 @@
 # Kubernetes kubeadm setup:
 This guide describes how to standup a single node `Kubernetes` cluster running `Flannel`
 
+## Preflight
+The following must be installed/configured prior:
+
+```
+Docker
+```
+
+`kubeadm` must be installed:
+1) Install the repo
+
+    ```
+    cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+    [kubernetes]
+    name=Kubernetes
+    baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+    enabled=1
+    gpgcheck=1
+    repo_gpgcheck=1
+    gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+    exclude=kube*
+    EOF
+    ```
+
+1) Disable SE Linux
+
+    ```
+    setenforce 0
+    ```
+
+1) Install `kubeadm` and related packages:
+
+    ```
+    yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
+    ```
+
+1) Enable `kubelet`:
+
+    ```
+    systemctl enable --now kubelet
+    ```
+
+Swap must be disabled
+1) Disable Swap for current runtime
+
+    ```
+    swapoff -a
+    ```
+
+1) Remove swap references in `/etc/fstab`
+
+    ```
+    vi /etc/fstab
+    ```
+
+    Comment out line referencing swap
+
+Disable `kube` traffic going through `iptables`:
+
+    ```
+    echo '' >> /etc/sysctl.conf
+    echo 'net.bridge.bridge-nf-call-iptables = 1' >> /etc/sysctl.conf
+    sudo sysctl -p
+    ```
+
 ## Instructions
 1) Run the following command to stand up the cluster:
     ```bash
-    kubeadm init --hostname-override --node-name kube-home --pod-network-cidr=10.244.0.0/16
+    kubeadm init --node-name kube-home --pod-network-cidr=10.244.0.0/16
     ```
 
 1) Set `KUBE_CONFIG` environment variable to interface with `kubectl`:
@@ -142,12 +206,12 @@ Since [`Home Assistant`](https://www.home-assistant.io/) and a few other service
 
 1) Configure `MetalLB`:
     ```bash
-    kubectl create -f metallb/metallb/config.yaml
+    kubectl create -f system/metallb/config.yaml
     ```
 
 Please note, this has been built with versions:
 
-kube: v1.14.0
+kube: v1.15.0
 helm: v2.13.0
 
 # Uninstall `Kubernetes`
