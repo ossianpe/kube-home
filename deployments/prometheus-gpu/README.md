@@ -18,3 +18,5 @@ cd deployments/prometheus-gpu
 ./uninstall.sh
 ```
 
+## Reference
+https://docs.nvidia.com/datacenter/kubernetes/kubernetes-install-guide/index.html#kubernetes-setup-monitoring
