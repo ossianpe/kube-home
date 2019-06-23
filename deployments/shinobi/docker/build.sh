@@ -18,6 +18,10 @@ cat << EOF > ${WORKDIR}/Dockerfile
 FROM nvidia/cuda:10.1-base-ubuntu18.04
 MAINTAINER Neatori Kawashiro
 
+# SET NVIDIA driver libraries required at runtime
+ENV NVIDIA_VISIBLE_DEVICES all
+ENV NVIDIA_DRIVER_CAPABILITIES video,compute,utility
+
 # INSTALL Dependancies
 RUN \
   apt update && \
