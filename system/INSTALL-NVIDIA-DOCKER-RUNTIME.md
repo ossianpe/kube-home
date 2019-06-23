@@ -66,6 +66,24 @@ curl -s -L https://nvidia.github.io/nvidia-docker/centos7/nvidia-docker.repo | \
 sudo yum install nvidia-docker2
 ```
 
+1) Set default runtime to `nvidia`
+
+    Open file `/etc/docker/daemon.json`
+
+    Add the line `"default-runtime": "nvidia"` to the json file, so it looks something like the following:
+
+```
+{
+    "default-runtime": "nvidia",
+    "runtimes": {
+        "nvidia": {
+            "path": "/usr/bin/nvidia-container-runtime",
+            "runtimeArgs": []
+        }
+    }
+}
+```
+
 1) Restart the system
 
 ```
