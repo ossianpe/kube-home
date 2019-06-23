@@ -104,4 +104,8 @@ https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#pre-instal
 
 ### Install NVIDIA Container Runtime for Docker 2
 https://nvidia.github.io/nvidia-docker/
+
 https://docs.nvidia.com/datacenter/kubernetes/kubernetes-install-guide/index.html#kubernetes-ncrd-install-container-runtime (this is only for Ubuntu..)
+
+### Set docker runtime to `nvidia`
+https://docs.deep-hybrid-datacloud.eu/en/latest/technical/kubernetes/gpu-kubernetes-ubuntu.html
