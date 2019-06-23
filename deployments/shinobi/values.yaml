@@ -6,7 +6,8 @@ replicaCount: 1
 
 image:
   repository: neatori18/shinobi
-  tag: 20180711_80260b07
+  tag: 62219_b23498d3
+#  tag: 20180711_80260b07
   pullPolicy: IfNotPresent
 
 service:
@@ -71,11 +72,11 @@ shinobi:
           user: your_email@gmail.com
           pass: your_password_or_app_specific_password
       cron:
-        key: 5b72a1d124c547f5d3da38cf68225f4c
+        key: de985914b609f324febb2768363c9db6
       pluginKeys:
-        Motion: c7ca713a1a41d719f8e5550cf590198e
-        OpenCV: 1cdcf6d18fc4f8bdd85a0b8b46fb268e
-        OpenALPR: 8292cace64588f0f04dcddf26335a055
+        Motion: 778b2f7d4be8f1f2ade038e21fe09aee
+        OpenCV: 0aa61c2efef35f5135e1a2f65796eba2
+        OpenALPR: 7eefc8bc7842290a0cfe416ed97b5b89
 
 ## MySQL chart configuration
 mysql:
@@ -84,12 +85,12 @@ mysql:
   mysqlDatabase: ccio
 #  mysqlRootPassword: password
   mysqlUser: majesticflame
-  mysqlPassword: 
+  mysqlPassword: OWYzYTg0NzJlZmIxMmQ5MTdlNGY0MjJi
   persistence:
     enabled: true
     storageClass: shinobi-mysql
     accessMode: ReadWriteOnce
-    size: 150Gi
+    size: 25Gi
   configurationFiles: {}
   initializationFiles: 
     10_framework.sql: |-
