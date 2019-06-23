@@ -66,6 +66,24 @@ curl -s -L https://nvidia.github.io/nvidia-docker/centos7/nvidia-docker.repo | \
 sudo yum install nvidia-docker2
 ```
 
+1) Set default runtime to `nvidia`
+
+    Open file `/etc/docker/daemon.json`
+
+    Add the line `"default-runtime": "nvidia"` to the json file, so it looks something like the following:
+
+```
+{
+    "default-runtime": "nvidia",
+    "runtimes": {
+        "nvidia": {
+            "path": "/usr/bin/nvidia-container-runtime",
+            "runtimeArgs": []
+        }
+    }
+}
+```
+
 1) Restart the system
 
 ```
@@ -86,4 +104,8 @@ https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#pre-instal
 
 ### Install NVIDIA Container Runtime for Docker 2
 https://nvidia.github.io/nvidia-docker/
+
 https://docs.nvidia.com/datacenter/kubernetes/kubernetes-install-guide/index.html#kubernetes-ncrd-install-container-runtime (this is only for Ubuntu..)
+
+### Set docker runtime to `nvidia`
+https://docs.deep-hybrid-datacloud.eu/en/latest/technical/kubernetes/gpu-kubernetes-ubuntu.html
