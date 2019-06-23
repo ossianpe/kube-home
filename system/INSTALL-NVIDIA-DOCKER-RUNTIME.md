@@ -97,6 +97,9 @@ To ensure that the drivers have been installed successfully run
 docker run -it --rm --runtime nvidia nvidia/cuda nvidia-smi
 ```
 
+##### Additional validation
+To validate even further, please follow [this article](https://xcat-docs.readthedocs.io/en/stable/advanced/gpu/nvidia/verify_cuda_install.html).
+
 # References
 
 ### Installing `NVIDIA` drivers for `Kubernetes`
