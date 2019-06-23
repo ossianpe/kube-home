@@ -20,3 +20,8 @@ Please note, root password is generated randomly with each install
 cd deployments/zoneminder
 ./uninstall.sh
 ```
+
+## References
+
+### Fix `libnvcuvid.so.1 depends on libGL.so.1`
+https://github.com/NVIDIA/nvidia-docker/issues/531
