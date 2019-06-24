@@ -49,6 +49,23 @@ sudo yum install cuda
 export PATH=/usr/local/cuda-10.1/bin:/usr/local/cuda-10.1/NsightCompute-2019.1${PATH:+:${PATH}}
 ```
 
+#### Patch driver for unlimited NVENC transcodes
+Apply this patch to remove the two stream transcode limit in the `NVIDIA` driver
+
+_Note: this is confirmed working with `NVIDIA` driver version `418.67`. Other versions may not work._
+
+1) Clone `nvidia-patch`
+
+```
+git clone https://github.com/keylase/nvidia-patch
+```
+
+1) Run patch
+
+```
+cd nvidia-patch && ./patch.sh
+```
+
 #### Install NVIDIA Container Runtime for Docker 2
 
 1) Download offical GPG keys
