@@ -20,6 +20,12 @@ spec:
       labels:
         app.kubernetes.io/name: {{ include "home-assistant.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
+      {{- if .Values.podAnnotations }}
+      annotations:
+        {{- range $key, $value := .Values.podAnnotations }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+      {{- end }}
     spec:
       {{- with .Values.image.pullSecrets }}
       imagePullSecrets:
@@ -89,6 +95,14 @@ spec:
           volumeMounts:
           - mountPath: /config
             name: config
+          {{- if .Values.zwave.enabled }}
+          - mountPath: /dev/ttyACM0
+            name: ttyacm
+          {{- end }}
+          {{- if .Values.zigbee.enabled }}
+          - mountPath: /dev/ttyACM1
+            name: ttyacm1
+          {{- end }}
           {{- if .Values.git.enabled }}
           - mountPath: {{ .Values.git.keyPath }}
             name: git-secret
@@ -104,6 +118,62 @@ spec:
           {{- end }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
+          {{- if (.Values.zwave.enabled) or (.Values.zigbee.enabled) }}
+          securityContext:
+            privileged: true
+          {{- end }}
+        {{- if .Values.hassioSupervisor.enabled }}
+        - name: hassio-supervisor
+          image: "{{ .Values.hassioSupervisor.image.repository }}:{{ .Values.hassioSupervisor.image.tag }}"
+          imagePullPolicy: {{ .Values.hassioSupervisor.image.pullPolicy }}
+#          ports:
+#            - name: hassio-super
+#              containerPort: {{ .Values.hassioSupervisor.service.port }}
+#              protocol: TCP
+          env:
+            {{- if .Values.hassioSupervisor.supervisorName }}
+            - name: SUPERVISOR_NAME
+              value: "{{ .Values.hassioSupervisor.supervisorName }}"
+            {{- end }}
+            {{- if .Values.hassioSupervisor.supervisorShare }}
+            - name: SUPERVISOR_SHARE
+              value: "{{ .Values.hassioSupervisor.supervisorShare }}"
+            {{- end }}
+            {{- if .Values.hassioSupervisor.homeassistantRepository }}
+            - name: HOMEASSISTANT_REPOSITORY
+              value: "{{ .Values.hassioSupervisor.homeassistantRepository }}"
+            {{- end }}
+            {{- range $key, $value := .Values.hassioSupervisor.extraEnv }}
+            - name: {{ $key }}
+              value: {{ $value }}
+            {{- end }}
+          volumeMounts:
+          {{- if .Values.hassioSupervisor.dataDirectory }}
+          - mountPath: /data/
+            name: hassio-data
+          {{- end }}
+          {{- if .Values.hassioSupervisor.dockerSock }}
+          - mountPath: /var/run/docker.sock
+            name: hassio-dsock
+          {{- end }}
+          {{- if .Values.hassioSupervisor.dbus }}
+          - mountPath: /var/run/dbus
+            name: hassio-dbus
+          {{- end }}
+          {{- if .Values.usePodSecurityContext }}
+          securityContext:
+            runAsUser: {{ default 0 .Values.runAsUser }}
+          {{- if and (.Values.runAsUser) (.Values.fsGroup) }}
+          {{- if not (eq .Values.runAsUser 0.0) }}
+            fsGroup: {{ .Values.fsGroup }}
+          {{- end }}
+          {{- end }}
+          {{- end }}
+          resources:
+{{ toYaml .Values.hassioSupervisor.resources | indent 12 }}
+          securityContext:
+            privileged: true
+        {{- end }}
         {{- if .Values.configurator.enabled }}
         - name: configurator
           image: "{{ .Values.configurator.image.repository }}:{{ .Values.configurator.image.tag }}"
@@ -112,14 +182,6 @@ spec:
             - name: configurator
               containerPort: {{ .Values.configurator.service.port }}
               protocol: TCP
-          livenessProbe:
-            tcpSocket:
-              port: configurator
-            initialDelaySeconds: 30
-          readinessProbe:
-            tcpSocket:
-              port: configurator
-            initialDelaySeconds: 15
           env:
             {{- if .Values.configurator.hassApiPassword }}
             - name: HC_HASS_API_PASSWORD
@@ -128,7 +190,7 @@ spec:
                   name: {{ template "home-assistant.fullname" . }}-configurator
                   key: hass-api-password
             {{- end }}
-            {{- if (.Values.configurator.configurator_username) and (.Values.configurator.configurator_password) }}
+            {{- if (.Values.configurator.username) and (.Values.configurator.password) }}
             - name: HC_USERNAME
               valueFrom:
                 secretKeyRef:
@@ -197,14 +259,6 @@ spec:
             - name: vscode
               containerPort: {{ .Values.vscode.service.port }}
               protocol: TCP
-          livenessProbe:
-            tcpSocket:
-              port: vscode
-            initialDelaySeconds: 30
-          readinessProbe:
-            tcpSocket:
-              port: vscode
-            initialDelaySeconds: 15
           env:
             {{- if .Values.vscode.password }}
             - name: PASSWORD
@@ -240,6 +294,31 @@ spec:
       {{- else }}
         emptyDir: {}
       {{ end }}
+      {{- if .Values.zwave.enabled }}
+      - name: ttyacm
+        hostPath:
+          path: /dev/{{.Values.zwave.device}}
+      {{- end }}
+      {{- if .Values.zigbee.enabled }}
+      - name: ttyacm1
+        hostPath:
+          path: /dev/{{.Values.zigbee.device}}
+      {{- end }}
+      {{- if .Values.hassioSupervisor.enabled }}
+      - name: hassio-data
+        hostPath:
+          path: {{.Values.hassioSupervisor.dataDirectory }}
+      {{- end}}
+      {{- if .Values.hassioSupervisor.enabled }}
+      - name: hassio-dsock
+        hostPath:
+          path: {{.Values.hassioSupervisor.dockerSock }}
+      {{- end}}
+      {{- if .Values.hassioSupervisor.enabled }}
+      - name: hassio-dbus
+        hostPath:
+          path: {{.Values.hassioSupervisor.dbus }}
+      {{- end}}
       {{- if .Values.git.enabled }}
       - name: git-secret
         secret:
