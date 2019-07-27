@@ -3,15 +3,26 @@
 # Declare variables to be passed into your templates.
 
 image:
-  repository: homeassistant/qemux86-64-homeassistant
+  repository: ossianpe/home-assistant
+#  repository: homeassistant/qemux86-64-homeassistant
 #  repository: homeassistant/home-assistant
-  tag: 0.94.3
+  tag: 0.96.5-726
   pullPolicy: IfNotPresent
   pullSecrets: []
-  dockerSock: /var/run/docker.sock
+
+namespace: hass
 
 # upgrade strategy type (e.g. Recreate or RollingUpdate)
 strategyType: Recreate
+
+priorityClassName: hass-critical
+
+# Set this to override the default SQLite db
+database:
+  enabled: true
+  mysqlDatabase: hass
+  mysqlUser: admin
+  mysqlPassword: NzQxNzQwYmI0ZDQzYTc4YmQ4Y2U0ZmM0
 
 service:
   type: LoadBalancer
@@ -75,7 +86,7 @@ persistence:
     ## the existingClaim variable
     existingClaim: home-assistant-config
     accessMode: ReadWriteOnce
-    size: 25Gi
+    size: 5Gi
 
 ## Additional hass container environment variable
 ## For instance to add a http_proxy
@@ -98,31 +109,6 @@ usePodSecurityContext: true
 # When setting runAsUser to a different value than 0 also set fsGroup to the same value:
 # runAsUser: <defaults to 0>
 # fsGroup: <will be omitted in deployment if runAsUser is 0>
-
-components:
-  dasshio:
-    enabled: false
-
-    image:
-      repository: robertbeal/dasshio
-      tag: amd64
-      pullPolicy: IfNotPresent
-
-    dataPath: /mnt/home-assistant/data
-
-  esphome:
-    enabled: false
-
-    image:
-      repository: esphome/esphome
-      tag: 1.13.6
-      pullPolicy: IfNotPresent
-
-    dataPath: /mnt/home-assistant/config/esphome
-
-    service:
-      type: LoadBalancer
-      port: 6052
 
 git:
   enabled: false
@@ -170,7 +156,7 @@ configurator:
   configurator_username: admin
   ## password (sha256-hash) for basic auth for accessing the configurator
   ## For example "test" would be "{sha256}9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"
-  configurator_password: OWM1YzgxOGEyNzgwNDhlNTQyMDIwZjky
+  configurator_password: NzQxNzQwYmI0ZDQzYTc4YmQ4Y2U0ZmM0
 
   ## Additional hass-configurator container environment variable
   ## For instance to add a http_proxy
@@ -209,21 +195,21 @@ configurator:
 # settings has to be enabled in configuration.yaml
 # https://www.home-assistant.io/components/prometheus/
 monitoring:
-  enabled: false
+  enabled: true
   serviceMonitor:
     # When set true and if Prometheus Operator is installed then use a ServiceMonitor to configure scraping
     enabled: true
     # Set the namespace the ServiceMonitor should be deployed
-    # namespace: monitoring
+    namespace: hass
     # Set how frequently Prometheus should scrape
-    # interval: 30s
+    interval: 30s
     # Set path to beats-exporter telemtery-path
-    # telemetryPath: /metrics
+    telemetryPath: /metrics
     # Set labels for the ServiceMonitor, use this to define your scrape label for Prometheus Operator
-    # labels:
+    #labels:
 
 vscode:
-  enabled: false
+  enabled: true
 
   ## code-server container image
   ##
@@ -260,7 +246,8 @@ vscode:
     #      - home-assistant.local
 
   service:
-    type: ClusterIP
+    type: LoadBalancer
+    loadBalancerIP: 192.168.29.10
     port: 80
     annotations: {}
     labels: {}
@@ -273,7 +260,7 @@ vscode:
     loadBalancerSourceRanges: []
     # nodePort: 30000
 
-resources: {}
+resources:
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -281,9 +268,9 @@ resources: {}
   # limits:
   #  cpu: 100m
   #  memory: 128Mi
-  # requests:
-  #  cpu: 100m
-  #  memory: 128Mi
+  requests:
+   cpu: 500m
+   memory: 1024Mi
 
 nodeSelector: {}
 

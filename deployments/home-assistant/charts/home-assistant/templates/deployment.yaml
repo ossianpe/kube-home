@@ -92,13 +92,24 @@ spec:
                   name: {{ $opts.secret }}
                   key: {{ $opts.key }}
             {{- end }}
+          {{- if .Values.database.enabled }}
+          lifecycle:
+            postStart:
+              exec:
+                command:
+                - /bin/sh
+                - -c
+                - |
+                  echo "mysql://{{ .Values.database.mysqlUser }}:{{ .Values.database.mysqlPassword }}@mysql.{{ .Values.namespace }}.svc.cluster.local/{{ .Values.database.mysqlDatabase }}?charset=utf8" >> /config/database_connection
+          {{- end }}
+          {{- if .Values.priorityClassName }}
+          priorityClassName: {{ .Values.priorityClassName }}
+          {{- end }}
           volumeMounts:
           - mountPath: /config
             name: config
           - mountPath: /data
             name: data
-          - mountPath: /var/run/docker.sock
-            name: ha-dsock
           {{- if .Values.zwave.enabled }}
           - mountPath: /dev/ttyACM0
             name: ttyacm
@@ -126,26 +137,6 @@ spec:
           securityContext:
             privileged: true
           {{- end }}
-        {{- if .Values.components.dasshio.enabled }}
-        - name: dasshio
-          image: "{{ .Values.components.dasshio.image.repository }}:{{ .Values.components.dasshio.image.tag }}"
-          imagePullPolicy: {{ .Values.components.dasshio.image.pullPolicy }}
-          volumeMounts:
-          - mountPath: /data
-            name: component-dasshio-data
-        {{- end }}
-        {{- if .Values.components.esphome.enabled }}
-        - name: esphome
-          image: "{{ .Values.components.esphome.image.repository }}:{{ .Values.components.esphome.image.tag }}"
-          imagePullPolicy: {{ .Values.components.esphome.image.pullPolicy }}
-          ports:
-            - name: esphome
-              containerPort: {{ .Values.components.esphome.service.port }}
-              protocol: TCP
-          volumeMounts:
-          - mountPath: /config
-            name: component-esphome-config
-        {{- end }}
         {{- if .Values.configurator.enabled }}
         - name: configurator
           image: "{{ .Values.configurator.image.repository }}:{{ .Values.configurator.image.tag }}"
@@ -193,6 +184,9 @@ spec:
             - name: {{ $key }}
               value: {{ $value }}
             {{- end }}
+          {{- if .Values.priorityClassName }}
+          priorityClassName: {{ .Values.priorityClassName }}
+          {{- end }}
           volumeMounts:
           - mountPath: /config
             name: config
@@ -243,6 +237,9 @@ spec:
             - name: {{ $key }}
               value: {{ $value }}
             {{- end }}
+          {{- if .Values.priorityClassName }}
+          priorityClassName: {{ .Values.priorityClassName }}
+          {{- end }}
           volumeMounts:
           - mountPath: /config
             name: config
@@ -283,19 +280,6 @@ spec:
         hostPath:
           path: /dev/{{.Values.zigbee.device}}
       {{- end }}
-      {{- if .Values.components.dasshio.enabled }}
-      - name: component-dasshio-data
-        hostPath:
-          path: {{.Values.components.dasshio.dataPath }}
-      {{ end }}
-      {{- if .Values.components.esphome.enabled }}
-      - name: component-esphome-config
-        hostPath:
-          path: {{.Values.components.esphome.dataPath }}
-      {{ end }}
-      - name: ha-dsock
-        hostPath:
-          path: {{.Values.image.dockerSock }}
       {{- if .Values.git.enabled }}
       - name: git-secret
         secret:

@@ -1,14 +1,14 @@
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: home-assistant
+  name: home-assistant-mysql
   labels:
     type: local
 spec:
-  storageClassName: home-assistant
+  storageClassName: home-assistant-mysql
   capacity:
-    storage: 50Gi
+    storage: 10Gi
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/mnt/home-assistant"
+    path: "/mnt/home-assistant/mysql"

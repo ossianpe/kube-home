@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ template "home-assistant.fullname" . }}
+  name: {{ template "esphome.fullname" . }}
   labels:
-    app.kubernetes.io/name: {{ include "home-assistant.name" . }}
-    helm.sh/chart: {{ include "home-assistant.chart" . }}
+    app.kubernetes.io/name: {{ include "esphome.name" . }}
+    helm.sh/chart: {{ include "esphome.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- if .Values.service.labels }}
@@ -37,14 +37,6 @@ spec:
 {{ toYaml .Values.service.externalIPs | indent 4 }}
 {{- end }}
   ports:
-    - name: api
-      port: {{ .Values.service.port }}
-      protocol: TCP
-      targetPort: 8123
-{{ if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.nodePort))) }}
-      nodePort: {{.Values.service.nodePort}}
-{{ end }}
-{{- if .Values.components.esphome.enabled }}
     - name: esphome
       port: {{ .Values.components.esphome.service.port }}
       protocol: TCP
@@ -52,25 +44,6 @@ spec:
 {{ if (and (eq .Values.components.esphome.service.type "NodePort") (not (empty .Values.components.esphome.service.nodePort))) }}
       nodePort: {{.Values.components.esphome.service.nodePort}}
 {{ end }}
-{{- end }}
-{{- if .Values.configurator.enabled }}
-    - name: configurator
-      port: {{ .Values.configurator.service.port }}
-      protocol: TCP
-      targetPort: 3218
-{{ if (and (eq .Values.configurator.service.type "NodePort") (not (empty .Values.configurator.service.nodePort))) }}
-      nodePort: {{.Values.configurator.service.nodePort}}
-{{ end }}
-{{- end }}
-{{- if .Values.vscode.enabled }}
-    - name: vscode
-      port: {{ .Values.vscode.service.port }}
-      protocol: TCP
-      targetPort: 80
-{{ if (and (eq .Values.vscode.service.type "NodePort") (not (empty .Values.vscode.service.nodePort))) }}
-      nodePort: {{.Values.vscode.service.nodePort}}
-{{ end }}
-{{- end }}
   selector:
-    app.kubernetes.io/name: {{ include "home-assistant.name" . }}
+    app.kubernetes.io/name: {{ include "esphome.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}

@@ -8,7 +8,9 @@ image:
   pullPolicy: IfNotPresent
   pullSecrets: []
 
-dataPath: /mnt/home-assistant/config/esphome
+configPath: /mnt/home-assistant/config/esphome
+
+priorityClassName: hass-critical
 
 # upgrade strategy type (e.g. Recreate or RollingUpdate)
 strategyType: Recreate
@@ -16,7 +18,7 @@ strategyType: Recreate
 service:
   type: LoadBalancer
   loadBalancerIP: 192.168.29.10
-  port: 8123
+  port: 6052
   annotations: {}
   labels: {}
   clusterIP: ""
@@ -90,7 +92,7 @@ components:
       type: LoadBalancer
       port: 6052
 
-resources: {}
+resources:
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -98,9 +100,9 @@ resources: {}
   # limits:
   #  cpu: 100m
   #  memory: 128Mi
-  # requests:
-  #  cpu: 100m
-  #  memory: 128Mi
+  requests:
+   cpu: 100m
+   memory: 128Mi
 
 nodeSelector: {}
 

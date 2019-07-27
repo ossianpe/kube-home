@@ -19,9 +19,9 @@ testFramework:
 
 ## Create a database user
 ##
-# mysqlUser:
+mysqlUser: admin
 ## Default: random 10 character string
-# mysqlPassword:
+mysqlPassword: NzQxNzQwYmI0ZDQzYTc4YmQ4Y2U0ZmM0
 
 ## Allow unauthenticated access, uncomment to enable
 ##
@@ -29,7 +29,7 @@ testFramework:
 
 ## Create a database
 ##
-# mysqlDatabase:
+mysqlDatabase: hass
 
 ## Specify an imagePullPolicy (Required)
 ## It's recommended to change this to 'Always' if the image tag is 'latest'
@@ -95,9 +95,9 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
-  # storageClass: "-"
+  storageClass: home-assistant-mysql
   accessMode: ReadWriteOnce
-  size: 8Gi
+  size: 10Gi
   annotations: {}
 
 ## Use an alternate scheduler, e.g. "stork".
@@ -202,7 +202,7 @@ podAnnotations: {}
 podLabels: {}
 
 ## Set pod priorityClassName
-# priorityClassName: {}
+priorityClassName: hass-critical
 
 
 ## Init container resources defaults

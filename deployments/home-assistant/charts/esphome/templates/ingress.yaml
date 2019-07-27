@@ -1,24 +1,24 @@
-{{- if (.Values.vscode.enabled) and (.Values.vscode.ingress.enabled) }}
-{{- $fullName := include "home-assistant.fullname" . -}}
-{{- $servicePort := .Values.vscode.service.port -}}
-{{- $ingressPath := .Values.vscode.ingress.path -}}
+{{- if .Values.ingress.enabled -}}
+{{- $fullName := include "esphome.fullname" . -}}
+{{- $servicePort := .Values.service.port -}}
+{{- $ingressPath := .Values.ingress.path -}}
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: {{ $fullName }}-vscode
+  name: {{ $fullName }}
   labels:
-    app.kubernetes.io/name: {{ include "home-assistant.name" . }}
-    helm.sh/chart: {{ include "home-assistant.chart" . }}
+    app.kubernetes.io/name: {{ include "esphome.name" . }}
+    helm.sh/chart: {{ include "esphome.chart" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
     app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- with .Values.vscode.ingress.annotations }}
+{{- with .Values.ingress.annotations }}
   annotations:
 {{ toYaml . | indent 4 }}
 {{- end }}
 spec:
-{{- if .Values.vscode.ingress.tls }}
+{{- if .Values.ingress.tls }}
   tls:
-  {{- range .Values.vscode.ingress.tls }}
+  {{- range .Values.ingress.tls }}
     - hosts:
       {{- range .hosts }}
         - {{ . }}
@@ -27,7 +27,7 @@ spec:
   {{- end }}
 {{- end }}
   rules:
-  {{- range .Values.vscode.ingress.hosts }}
+  {{- range .Values.ingress.hosts }}
     - host: {{ . }}
       http:
         paths:
