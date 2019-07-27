@@ -41,6 +41,9 @@ spec:
         - name: dasshio
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: HASSIO_TOKEN
+              value: {{ .Values.token }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
           volumeMounts:

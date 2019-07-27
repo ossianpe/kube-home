@@ -70,16 +70,16 @@ spec:
             httpGet:
               path: /
               port: api
-            initialDelaySeconds: 30
+            initialDelaySeconds: 100
             failureThreshold: 5
-            timeoutSeconds: 5
+            timeoutSeconds: 30
           readinessProbe:
             httpGet:
               path: /
               port: api
-            initialDelaySeconds: 30
+            initialDelaySeconds: 100
             failureThreshold: 5
-            timeoutSeconds: 5
+            timeoutSeconds: 30
           env:
             {{- range $key, $value := .Values.extraEnv }}
             - name: {{ $key }}
@@ -100,7 +100,7 @@ spec:
                 - /bin/sh
                 - -c
                 - |
-                  echo "mysql://{{ .Values.database.mysqlUser }}:{{ .Values.database.mysqlPassword }}@mysql.{{ .Values.namespace }}.svc.cluster.local/{{ .Values.database.mysqlDatabase }}?charset=utf8" >> /config/database_connection
+                  echo "mysql://{{ .Values.database.mysqlUser }}:{{ .Values.database.mysqlPassword }}@mysql.{{ .Values.namespace }}.svc.cluster.local/{{ .Values.database.mysqlDatabase }}?charset=utf8" > /config/database_connection
           {{- end }}
           {{- if .Values.priorityClassName }}
           priorityClassName: {{ .Values.priorityClassName }}
@@ -108,14 +108,12 @@ spec:
           volumeMounts:
           - mountPath: /config
             name: config
-          - mountPath: /data
-            name: data
           {{- if .Values.zwave.enabled }}
-          - mountPath: /dev/ttyACM0
+          - mountPath: /dev/ttyzwave
             name: ttyacm
           {{- end }}
           {{- if .Values.zigbee.enabled }}
-          - mountPath: /dev/ttyACM1
+          - mountPath: /dev/ttyzigbee
             name: ttyacm1
           {{- end }}
           {{- if .Values.git.enabled }}
@@ -260,13 +258,6 @@ spec:
       {{- if .Values.persistence.config.enabled }}
         persistentVolumeClaim:
           claimName: {{ if .Values.persistence.config.existingClaim }}{{ .Values.persistence.config.existingClaim }}{{- else }}{{ template "home-assistant.fullname" . }}{{- end }}
-      {{- else }}
-        emptyDir: {}
-      {{ end }}
-      - name: data
-      {{- if .Values.persistence.data.enabled }}
-        persistentVolumeClaim:
-          claimName: {{ if .Values.persistence.data.existingClaim }}{{ .Values.persistence.data.existingClaim }}{{- else }}{{ template "home-assistant.fullname" . }}{{- end }}
       {{- else }}
         emptyDir: {}
       {{ end }}

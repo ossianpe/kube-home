@@ -1,6 +1,6 @@
 SERVICE='home-assistant'
 KUBE_RESOURCES='pv pvc'
-STORAGES='data config mysql'
+STORAGES='config mysql'
 
 DIR_PATH=$(echo ${0} | sed 's/\(.*\)\/.*/\1/')
 

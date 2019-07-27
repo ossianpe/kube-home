@@ -22,7 +22,7 @@ database:
   enabled: true
   mysqlDatabase: hass
   mysqlUser: admin
-  mysqlPassword: NzQxNzQwYmI0ZDQzYTc4YmQ4Y2U0ZmM0
+  mysqlPassword: MmQxMDQ0OTQzNjI4ZTdlZjIwYWVlNjQ5
 
 service:
   type: LoadBalancer
@@ -55,22 +55,6 @@ ingress:
 hostNetwork: true
 
 persistence:
-  data:
-    enabled: true
-    ## home-assistant data Persistent Volume Storage Class
-    ## If defined, storageClassName: <storageClass>
-    ## If set to "-", storageClassName: "", which disables dynamic provisioning
-    ## If undefined (the default) or set to null, no storageClassName spec is
-    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-    ##   GKE, AWS & OpenStack)
-    ##
-    # storageClass: home-assistant-data
-    ##
-    ## If you want to reuse an existing claim, you can pass the name of the PVC using
-    ## the existingClaim variable
-    existingClaim: home-assistant-data
-    accessMode: ReadWriteOnce
-    size: 1Gi
   config:
     enabled: true
     ## home-assistant data Persistent Volume Storage Class
@@ -156,7 +140,7 @@ configurator:
   configurator_username: admin
   ## password (sha256-hash) for basic auth for accessing the configurator
   ## For example "test" would be "{sha256}9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"
-  configurator_password: NzQxNzQwYmI0ZDQzYTc4YmQ4Y2U0ZmM0
+  configurator_password: MmQxMDQ0OTQzNjI4ZTdlZjIwYWVlNjQ5
 
   ## Additional hass-configurator container environment variable
   ## For instance to add a http_proxy

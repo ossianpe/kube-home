@@ -3,12 +3,15 @@
 # Declare variables to be passed into your templates.
 
 image:
-  repository: robertbeal/dasshio
-  tag: amd64
+  repository: msuossianpe/dasshio
+  tag: 727
   pullPolicy: IfNotPresent
   pullSecrets: []
 
-dataPath: /mnt/home-assistant/data
+# Used for authenticating with home assistant
+token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJiNjM4MmVlNjI3NTc0OWJjYjMzMTkzZGNjZDE0MDhhMSIsImlhdCI6MTU2NDI2ODA0OCwiZXhwIjoxODc5NjI4MDQ4fQ.IUo7hz2G7mtTLK9UFGHcoVFgPALnujNRb9XUy9oE0qo
+
+dataPath: /mnt/home-assistant/config/dasshio
 
 priorityClassName: hass-critical
 

@@ -21,7 +21,7 @@ testFramework:
 ##
 mysqlUser: admin
 ## Default: random 10 character string
-mysqlPassword: NzQxNzQwYmI0ZDQzYTc4YmQ4Y2U0ZmM0
+mysqlPassword: MmQxMDQ0OTQzNjI4ZTdlZjIwYWVlNjQ5
 
 ## Allow unauthenticated access, uncomment to enable
 ##
