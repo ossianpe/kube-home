@@ -1,0 +1,112 @@
+# Default values for home-assistant.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+image:
+  repository: esphome/esphome
+  tag: 1.13.6
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+
+dataPath: /mnt/home-assistant/config/esphome
+
+# upgrade strategy type (e.g. Recreate or RollingUpdate)
+strategyType: Recreate
+
+service:
+  type: LoadBalancer
+  loadBalancerIP: 192.168.29.10
+  port: 8123
+  annotations: {}
+  labels: {}
+  clusterIP: ""
+  ## List of IP addresses at which the hass-configurator service is available
+  ## Ref: https://kubernetes.io/docs/user-guide/services/#external-ips
+  ##
+  externalIPs: []
+  loadBalancerIP: ""
+  loadBalancerSourceRanges: []
+  # nodePort: 30000
+
+ingress:
+  enabled: true
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  path: /
+  hosts:
+    - esphome.local
+  tls: []
+  #  - secretName: esphome-tls
+  #    hosts:
+  #      - esphome.local
+
+hostNetwork: true
+
+## Additional hass container environment variable
+## For instance to add a http_proxy
+##
+extraEnv: {}
+
+## Additional hass container environment variable from k8s secrets
+## For instance to add a password
+## can use `!env_var` in the home assistant configuration to reference these variables
+extraEnvSecrets:
+  # Example
+  # This will set ${MQTT_PASSWORD} to the 'password' key from the 'mqtt' secret
+  # MQTT_PASSWORD:
+  #   secret: mqtt
+  #   key: password
+
+# Enable pod security context (must be `true` if runAsUser or fsGroup are set)
+usePodSecurityContext: true
+# Set runAsUser to 1000 to let home-assistant run as non-root user 'hass' which exists in 'runningman84/alpine-homeassistant' docker image.
+# When setting runAsUser to a different value than 0 also set fsGroup to the same value:
+# runAsUser: <defaults to 0>
+# fsGroup: <will be omitted in deployment if runAsUser is 0>
+
+components:
+  dasshio:
+    enabled: true
+
+    image:
+      repository: robertbeal/dasshio
+      tag: amd64
+      pullPolicy: IfNotPresent
+
+    dataPath: /mnt/home-assistant/data
+
+  esphome:
+    enabled: true
+
+    image:
+      repository: esphome/esphome
+      tag: 1.13.6
+      pullPolicy: IfNotPresent
+
+    dataPath: /mnt/home-assistant/config/esphome
+
+    service:
+      type: LoadBalancer
+      port: 6052
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #  cpu: 100m
+  #  memory: 128Mi
+  # requests:
+  #  cpu: 100m
+  #  memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+podAnnotations:
+  container.apparmor.security.beta.kubernetes.io/esphome: unconfined

@@ -1,0 +1,18 @@
+apiVersion: v1
+appVersion: 0.1.0
+description: esphome
+name: esphome
+version: 0.1.0
+keywords:
+- esphome
+home: https://github.com/home-assistant/home-assistant
+icon: https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Home_Assistant_Logo.svg/519px-Home_Assistant_Logo.svg.png
+sources:
+- https://github.com/home-assistant/home-assistant
+- https://github.com/danielperna84/hass-configurator
+- https://github.com/cdr/code-server
+maintainers:
+- name: billimek
+  email: jeff@billimek.com
+- name: runningman84
+  email: philipp.hellmich@bertelsmann.de

@@ -1,0 +1,14 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: home-assistant-config
+  labels:
+    type: local
+spec:
+  storageClassName: home-assistant-config
+  capacity:
+    storage: 25Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/home-assistant/config"
