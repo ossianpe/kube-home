@@ -38,24 +38,118 @@ spec:
       dnsPolicy: ClusterFirstWithHostNet
       {{- end }}
       containers:
-        - name: dasshio
+        - name: dasshio-doorbell
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: HASSIO_TOKEN
               value: {{ .Values.token }}
+            {{- if .Values.ssl.enable }}
+            - name: SSL_ENABLED
+              value: True
+            {{- end }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
           volumeMounts:
           - mountPath: /data
-            name: component-dasshio-data
+            name: dasshio-doorbell
+        - name: dasshio-kitchen
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: HASSIO_TOKEN
+              value: {{ .Values.token }}
+            {{- if .Values.ssl.enable }}
+            - name: SSL_ENABLED
+              value: True
+            {{- end }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+          volumeMounts:
+          - mountPath: /data
+            name: dasshio-kitchen
+        - name: dasshio-laundryroom
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: HASSIO_TOKEN
+              value: {{ .Values.token }}
+            {{- if .Values.ssl.enable }}
+            - name: SSL_ENABLED
+              value: True
+            {{- end }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+          volumeMounts:
+          - mountPath: /data
+            name: dasshio-laundryroom
+        - name: dasshio-livingroom
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: HASSIO_TOKEN
+              value: {{ .Values.token }}
+            {{- if .Values.ssl.enable }}
+            - name: SSL_ENABLED
+              value: True
+            {{- end }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+          volumeMounts:
+          - mountPath: /data
+            name: dasshio-livingroom
+        - name: dasshio-petersroom
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: HASSIO_TOKEN
+              value: {{ .Values.token }}
+            {{- if .Values.ssl.enable }}
+            - name: SSL_ENABLED
+              value: True
+            {{- end }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+          volumeMounts:
+          - mountPath: /data
+            name: dasshio-petersroom
+        - name: dasshio-remotes
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: HASSIO_TOKEN
+              value: {{ .Values.token }}
+            {{- if .Values.ssl.enable }}
+            - name: SSL_ENABLED
+              value: True
+            {{- end }}
+          resources:
+{{ toYaml .Values.resources | indent 12 }}
+          volumeMounts:
+          - mountPath: /data
+            name: dasshio-remotes
       {{- if .Values.priorityClassName }}      
       priorityClassName: {{ .Values.priorityClassName }}
       {{- end }}
       volumes:
-      - name: component-dasshio-data
+      - name: dasshio-doorbell
         hostPath:
-          path: {{.Values.dataPath }}
+          path: {{.Values.dataPaths.doorbell }}
+      - name: dasshio-kitchen
+        hostPath:
+          path: {{.Values.dataPaths.kitchen }}
+      - name: dasshio-laundryroom
+        hostPath:
+          path: {{.Values.dataPaths.laundryRoom }}
+      - name: dasshio-livingroom
+        hostPath:
+          path: {{.Values.dataPaths.livingRoom }}
+      - name: dasshio-petersroom
+        hostPath:
+          path: {{.Values.dataPaths.petersRoom }}
+      - name: dasshio-remotes
+        hostPath:
+          path: {{.Values.dataPaths.remotes }}
     {{- with .Values.nodeSelector }}
       nodeSelector:
 {{ toYaml . | indent 8 }}

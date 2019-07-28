@@ -1,0 +1,1 @@
+* * * * 1 /bin/sh -c "/root/kube-home/script/rotate_ssl.sh"

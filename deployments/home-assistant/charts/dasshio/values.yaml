@@ -4,19 +4,28 @@
 
 image:
   repository: msuossianpe/dasshio
-  tag: 727
+  tag: 728
   pullPolicy: IfNotPresent
   pullSecrets: []
 
 # Used for authenticating with home assistant
-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJiNjM4MmVlNjI3NTc0OWJjYjMzMTkzZGNjZDE0MDhhMSIsImlhdCI6MTU2NDI2ODA0OCwiZXhwIjoxODc5NjI4MDQ4fQ.IUo7hz2G7mtTLK9UFGHcoVFgPALnujNRb9XUy9oE0qo
+token:  
 
-dataPath: /mnt/home-assistant/config/dasshio
+dataPaths:
+  doorbell: /mnt/home-assistant/config/dasshio/doorbell
+  kitchen: /mnt/home-assistant/config/dasshio/kitchen
+  laundryRoom: /mnt/home-assistant/config/dasshio/laundry_room
+  livingRoom: /mnt/home-assistant/config/dasshio/living_room
+  petersRoom: /mnt/home-assistant/config/dasshio/peters_room
+  remotes: /mnt/home-assistant/config/dasshio/remotes
 
 priorityClassName: hass-critical
 
 # upgrade strategy type (e.g. Recreate or RollingUpdate)
 strategyType: Recreate
+
+ssl:
+  enable: false
 
 hostNetwork: true
 
@@ -51,8 +60,8 @@ resources:
   #  cpu: 100m
   #  memory: 128Mi
   requests:
-   cpu: 100m
-   memory: 128Mi
+   cpu: 20m
+   memory: 64Mi
 
 nodeSelector: {}
 
@@ -61,4 +70,9 @@ tolerations: []
 affinity: {}
 
 podAnnotations:
-  container.apparmor.security.beta.kubernetes.io/dasshio: unconfined
+  container.apparmor.security.beta.kubernetes.io/dasshio-doorbell: unconfined
+  container.apparmor.security.beta.kubernetes.io/dasshio-kitchen: unconfined
+  container.apparmor.security.beta.kubernetes.io/dasshio-laundryroom: unconfined
+  container.apparmor.security.beta.kubernetes.io/dasshio-livingroom: unconfined
+  container.apparmor.security.beta.kubernetes.io/dasshio-petersroom: unconfined
+  container.apparmor.security.beta.kubernetes.io/dasshio-remotes: unconfined

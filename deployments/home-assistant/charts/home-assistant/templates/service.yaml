@@ -44,6 +44,10 @@ spec:
 {{ if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.nodePort))) }}
       nodePort: {{.Values.service.nodePort}}
 {{ end }}
+    - name: esphome
+      port: 6052
+      protocol: TCP
+      targetPort: 6052
 {{- if .Values.configurator.enabled }}
     - name: configurator
       port: {{ .Values.configurator.service.port }}

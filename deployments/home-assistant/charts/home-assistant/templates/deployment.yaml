@@ -100,7 +100,7 @@ spec:
                 - /bin/sh
                 - -c
                 - |
-                  echo "mysql://{{ .Values.database.mysqlUser }}:{{ .Values.database.mysqlPassword }}@mysql.{{ .Values.namespace }}.svc.cluster.local/{{ .Values.database.mysqlDatabase }}?charset=utf8" > /config/database_connection
+                  echo "mysql://{{ .Values.database.mysqlUser }}:{{ .Values.database.mysqlPassword }}@$HASS_MYSQL_SERVICE_HOST/{{ .Values.database.mysqlDatabase }}?charset=utf8" > /config/database_connection
           {{- end }}
           {{- if .Values.priorityClassName }}
           priorityClassName: {{ .Values.priorityClassName }}

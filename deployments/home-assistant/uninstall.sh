@@ -1,9 +1,11 @@
 clean="$1"
 
-helm del --purge dasshio
-helm del --purge esphome
-helm del --purge home-assistant
-helm del --purge mysql
+helm del --purge hass-dasshio
+helm del --purge hass-esphome
+helm del --purge hass
+helm del --purge hass-mysql
+helm del --purge hass-nginx-ingress
+helm del --purge hass-duckdns
 
 SERVICES='home-assistant esphome'
 KUBE_RESOURCES='deployment ingress secrets service'

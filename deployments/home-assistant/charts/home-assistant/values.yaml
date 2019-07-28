@@ -22,7 +22,7 @@ database:
   enabled: true
   mysqlDatabase: hass
   mysqlUser: admin
-  mysqlPassword: NDRjOGVmZWFiMjMyNGZkYTMwNmMyNzE5
+  mysqlPassword: YTk0YzZmNWIxZTE5MzQxMWRjODQ5MDY3
 
 service:
   type: LoadBalancer
@@ -46,6 +46,7 @@ ingress:
     # kubernetes.io/tls-acme: "true"
   path: /
   hosts:
+  #  - rbpsycamore.duckdns.org
     - home-assistant.local
   tls: []
   #  - secretName: home-assistant-tls
@@ -140,7 +141,7 @@ configurator:
   configurator_username: admin
   ## password (sha256-hash) for basic auth for accessing the configurator
   ## For example "test" would be "{sha256}9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"
-  configurator_password: NDRjOGVmZWFiMjMyNGZkYTMwNmMyNzE5
+  configurator_password: YTk0YzZmNWIxZTE5MzQxMWRjODQ5MDY3
 
   ## Additional hass-configurator container environment variable
   ## For instance to add a http_proxy
@@ -253,7 +254,7 @@ resources:
   #  cpu: 100m
   #  memory: 128Mi
   requests:
-   cpu: 500m
+   cpu: 250m
    memory: 1024Mi
 
 nodeSelector: {}
