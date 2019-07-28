@@ -22,7 +22,7 @@ database:
   enabled: true
   mysqlDatabase: hass
   mysqlUser: admin
-  mysqlPassword: MmQxMDQ0OTQzNjI4ZTdlZjIwYWVlNjQ5
+  mysqlPassword: NDRjOGVmZWFiMjMyNGZkYTMwNmMyNzE5
 
 service:
   type: LoadBalancer
@@ -140,7 +140,7 @@ configurator:
   configurator_username: admin
   ## password (sha256-hash) for basic auth for accessing the configurator
   ## For example "test" would be "{sha256}9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"
-  configurator_password: MmQxMDQ0OTQzNjI4ZTdlZjIwYWVlNjQ5
+  configurator_password: NDRjOGVmZWFiMjMyNGZkYTMwNmMyNzE5
 
   ## Additional hass-configurator container environment variable
   ## For instance to add a http_proxy
