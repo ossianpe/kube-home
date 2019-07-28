@@ -1,1 +1,1 @@
-docker build -t msuossianpe/dasshio:"${1}" dasshio/dasshio
+docker build -t msuossianpe/dasshio:"${1}" .
