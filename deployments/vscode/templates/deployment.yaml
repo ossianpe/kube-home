@@ -67,7 +67,7 @@ spec:
           args:
             - --allow-http
             - --port={{ .Values.vscode.hass.service.port }}
-            {{- if not (.Values.vscode.hass.password) }}
+            {{- if not (.Values.vscode.hass.hassPassword) }}
             - --no-auth
             {{- end }}
             {{- if .Values.vscode.hass.vscodePath }}
@@ -79,11 +79,11 @@ spec:
               containerPort: {{ .Values.vscode.hass.service.port }}
               protocol: TCP
           env:
-            {{- if .Values.vscode.hass.password }}
+            {{- if .Values.vscode.hass.hassPassword }}
             - name: PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "vscode.hass.fullname" . }}-hass
+                  name: {{ .Release.Name }}-hass
                   key: password
             {{- end }}
             {{- range $key, $value := .Values.vscode.hass.extraEnv }}
@@ -114,7 +114,7 @@ spec:
           args:
             - --allow-http
             - --port={{ .Values.vscode.kubeHome.service.port }}
-            {{- if not (.Values.vscode.kubeHome.password) }}
+            {{- if not (.Values.vscode.kubeHome.kubeHomePassword) }}
             - --no-auth
             {{- end }}
             {{- if .Values.vscode.kubeHome.vscodePath }}
@@ -126,11 +126,11 @@ spec:
               containerPort: {{ .Values.vscode.kubeHome.service.port }}
               protocol: TCP
           env:
-            {{- if .Values.vscode.kubeHome.password }}
+            {{- if .Values.vscode.kubeHome.kubeHomePassword }}
             - name: PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "vscode.kubeHome.fullname" . }}-kube-home
+                  name: {{ .Release.Name }}-kube-home
                   key: password
             {{- end }}
             {{- range $key, $value := .Values.vscode.kubeHome.extraEnv }}

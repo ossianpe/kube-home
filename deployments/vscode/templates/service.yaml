@@ -41,7 +41,7 @@ spec:
     - name: vs-hass
       port: {{ .Values.vscode.hass.service.port }}
       protocol: TCP
-      targetPort: 80
+      targetPort: {{ .Values.vscode.hass.service.port }}
 {{ if (and (eq .Values.vscode.hass.service.type "NodePort") (not (empty .Values.vscode.hass.service.nodePort))) }}
       nodePort: {{.Values.vscode.hass.service.nodePort}}
 {{ end }}
@@ -50,7 +50,7 @@ spec:
     - name: vs-kube-home
       port: {{ .Values.vscode.kubeHome.service.port }}
       protocol: TCP
-      targetPort: 90
+      targetPort: {{ .Values.vscode.kubeHome.service.port }}
 {{ if (and (eq .Values.vscode.kubeHome.service.type "NodePort") (not (empty .Values.vscode.kubeHome.service.nodePort))) }}
       nodePort: {{.Values.vscode.kubeHome.service.nodePort}}
 {{ end }}

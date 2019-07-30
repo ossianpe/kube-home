@@ -127,7 +127,7 @@ vscode:
     ##
 
     ## VSCode password
-    # password:
+    hassPassword: MTU0NjlmYTMyNjQyYmE0YzI0NGU1NWY4
 
     ## path where the home assistant configuration is stored
     configDir: /home-assistant
@@ -157,7 +157,8 @@ vscode:
     service:
       type: LoadBalancer
       loadBalancerIP: 192.168.29.15
-      port: 80
+      port: 90
+      targetPort: 90
       annotations: {}
       labels: {}
       clusterIP: ""
@@ -175,7 +176,7 @@ vscode:
     ##
 
     ## VSCode password
-    # password:
+    kubeHomePassword: MTU0NjlmYTMyNjQyYmE0YzI0NGU1NWY4
 
     ## path where the home assistant configuration is stored
     configDir: /kube-home
@@ -205,7 +206,8 @@ vscode:
     service:
       type: LoadBalancer
       loadBalancerIP: 192.168.29.15
-      port: 90
+      port: 91
+      targetPort: 91
       annotations: {}
       labels: {}
       clusterIP: ""
