@@ -2,6 +2,7 @@ kind: PersistentVolume
 apiVersion: v1
 metadata:
   name: home-assistant-mysql
+  namespace: hass
   labels:
     type: local
 spec:

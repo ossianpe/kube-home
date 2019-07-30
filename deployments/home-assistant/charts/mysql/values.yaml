@@ -209,5 +209,5 @@ priorityClassName: hass-critical
 initContainer:
   resources:
     requests:
-      memory: 10Mi
-      cpu: 10m
+      memory: 756Mi
+      cpu: 5m

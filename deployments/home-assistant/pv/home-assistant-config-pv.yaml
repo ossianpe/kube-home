@@ -2,6 +2,7 @@ kind: PersistentVolume
 apiVersion: v1
 metadata:
   name: home-assistant-config
+  namespace: hass
   labels:
     type: local
 spec:

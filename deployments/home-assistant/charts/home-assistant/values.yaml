@@ -35,7 +35,6 @@ service:
   ## Ref: https://kubernetes.io/docs/user-guide/services/#external-ips
   ##
   externalIPs: []
-  loadBalancerIP: ""
   loadBalancerSourceRanges: []
   # nodePort: 30000
 
@@ -194,7 +193,7 @@ monitoring:
     #labels:
 
 vscode:
-  enabled: true
+  enabled: false
 
   ## code-server container image
   ##
