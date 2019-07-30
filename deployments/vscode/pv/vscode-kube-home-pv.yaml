@@ -1,0 +1,14 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: vscode-kube-home
+  labels:
+    type: local
+spec:
+  storageClassName: vscode-kube-home
+  capacity:
+    storage: 5Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/root/kube-home"

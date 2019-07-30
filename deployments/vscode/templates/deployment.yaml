@@ -1,0 +1,190 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ template "vscode.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "vscode.name" . }}
+    helm.sh/chart: {{ include "vscode.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:
+  replicas: 1
+  strategy:
+    type: {{ .Values.strategyType }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "vscode.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "vscode.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+      {{- if .Values.podAnnotations }}
+      annotations:
+        {{- range $key, $value := .Values.podAnnotations }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+      {{- end }}
+    spec:
+      {{- with .Values.image.pullSecrets }}
+      imagePullSecrets:
+      {{- range . }}
+        - name: {{ . }}
+      {{- end }}
+      {{- end }}
+      {{- if .Values.hostNetwork }}
+      hostNetwork: {{ .Values.hostNetwork }}
+      dnsPolicy: ClusterFirstWithHostNet
+      {{- end }}
+      initContainers:
+      {{- if .Values.git.enabled }}
+      - name: git-sync
+        image: "{{ .Values.git.image.repository }}:{{ .Values.git.image.tag }}"
+        imagePullPolicy: {{ .Values.git.image.pullPolicy }}
+        command: ['sh', '-c', '[ "$(ls {{ .Values.git.syncPath }})" ] || git clone {{ .Values.git.repo }} {{ .Values.git.syncPath }}']
+        volumeMounts:
+        - mountPath: /config
+          name: config
+        - mountPath: {{ .Values.git.keyPath }}
+          name: git-secret
+        {{- if .Values.usePodSecurityContext }}
+        securityContext:
+          runAsUser: {{ default 0 .Values.runAsUser }}
+        {{- if and (.Values.runAsUser) (.Values.fsGroup) }}
+        {{- if not (eq .Values.runAsUser 0.0) }}
+          fsGroup: {{ .Values.fsGroup }}
+        {{- end }}
+        {{- end }}
+        {{- end }}
+      {{- end }}
+      containers:
+        {{- if .Values.vscode.hass.enabled }}
+        - name: vscode-hass
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          workingDir: {{ .Values.vscode.hass.configDir }}
+          args:
+            - --allow-http
+            - --port={{ .Values.vscode.hass.service.port }}
+            {{- if not (.Values.vscode.hass.password) }}
+            - --no-auth
+            {{- end }}
+            {{- if .Values.vscode.hass.vscodePath }}
+            - --extensions-dir={{ .Values.vscode.hass.vscodePath }}
+            - --user-data-dir={{ .Values.vscode.hass.vscodePath }}
+            {{- end }}
+          ports:
+            - name: vs-hass
+              containerPort: {{ .Values.vscode.hass.service.port }}
+              protocol: TCP
+          env:
+            {{- if .Values.vscode.hass.password }}
+            - name: PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "vscode.hass.fullname" . }}-hass
+                  key: password
+            {{- end }}
+            {{- range $key, $value := .Values.vscode.hass.extraEnv }}
+            - name: {{ $key }}
+              value: {{ $value }}
+            {{- end }}
+          {{- if .Values.priorityClassName }}
+          priorityClassName: {{ .Values.priorityClassName }}
+          {{- end }}
+          volumeMounts:
+          - mountPath: {{ .Values.vscode.hass.mountPath }}
+            name: vs-hass-data
+          {{- if .Values.usePodSecurityContext }}
+          securityContext:
+            runAsUser: {{ default 0 .Values.runAsUser }}
+          {{- if and (.Values.runAsUser) (.Values.fsGroup) }}
+          {{- if not (eq .Values.runAsUser 0.0) }}
+            fsGroup: {{ .Values.fsGroup }}
+          {{- end }}
+          {{- end }}
+          {{- end }}
+          resources:
+{{ toYaml .Values.vscode.resources | indent 12 }}
+        - name: vscode-kube-home
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          workingDir: {{ .Values.vscode.kubeHome.configDir }}
+          args:
+            - --allow-http
+            - --port={{ .Values.vscode.kubeHome.service.port }}
+            {{- if not (.Values.vscode.kubeHome.password) }}
+            - --no-auth
+            {{- end }}
+            {{- if .Values.vscode.kubeHome.vscodePath }}
+            - --extensions-dir={{ .Values.vscode.kubeHome.vscodePath }}
+            - --user-data-dir={{ .Values.vscode.kubeHome.vscodePath }}
+            {{- end }}
+          ports:
+            - name: vs-kube-home
+              containerPort: {{ .Values.vscode.kubeHome.service.port }}
+              protocol: TCP
+          env:
+            {{- if .Values.vscode.kubeHome.password }}
+            - name: PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "vscode.kubeHome.fullname" . }}-kube-home
+                  key: password
+            {{- end }}
+            {{- range $key, $value := .Values.vscode.kubeHome.extraEnv }}
+            - name: {{ $key }}
+              value: {{ $value }}
+            {{- end }}
+          {{- if .Values.priorityClassName }}
+          priorityClassName: {{ .Values.priorityClassName }}
+          {{- end }}
+          volumeMounts:
+          - mountPath: {{ .Values.vscode.kubeHome.mountPath }}
+            name: vs-kube-home-data
+          {{- if .Values.usePodSecurityContext }}
+          securityContext:
+            runAsUser: {{ default 0 .Values.runAsUser }}
+          {{- if and (.Values.runAsUser) (.Values.fsGroup) }}
+          {{- if not (eq .Values.runAsUser 0.0) }}
+            fsGroup: {{ .Values.fsGroup }}
+          {{- end }}
+          {{- end }}
+          {{- end }}
+          resources:
+{{ toYaml .Values.vscode.resources | indent 12 }}
+        {{- end }}
+      volumes:
+      - name: vs-kube-home-data
+      {{- if .Values.persistence.kubeHome.config.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ if .Values.persistence.kubeHome.config.existingClaim }}{{ .Values.persistence.kubeHome.config.existingClaim }}{{- else }}{{ template "vscode.fullname" . }}{{- end }}
+      {{- else }}
+        emptyDir: {}
+      {{ end }}
+      - name: vs-hass-data
+      {{- if .Values.persistence.hass.config.enabled }}
+        persistentVolumeClaim:
+          claimName: {{ if .Values.persistence.hass.config.existingClaim }}{{ .Values.persistence.hass.config.existingClaim }}{{- else }}{{ template "vscode.fullname" . }}{{- end }}
+      {{- else }}
+        emptyDir: {}
+      {{ end }}
+      {{- if .Values.git.enabled }}
+      - name: git-secret
+        secret:
+          defaultMode: 256
+          secretName: {{ .Values.git.secret }}
+      {{ end }}
+    {{- with .Values.nodeSelector }}
+      nodeSelector:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+{{ toYaml . | indent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+{{ toYaml . | indent 8 }}
+    {{- end }}
