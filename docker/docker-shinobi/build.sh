@@ -175,14 +175,15 @@ RUN mkdir /opt/shinobi/ffmpeg && \
 # INSTALL Shinobi
 WORKDIR /opt/shinobi
 RUN \
-  curl -SL https://gitlab.com/Shinobi-Systems/Shinobi/-/archive/${SHINOBI_HASH_LONG}/Shinobi-${SHINOBI_HASH_LONG}.tar.gz \
-  | tar xz -C . --strip-components=1
+  curl -SL https://gitlab.com/Shinobi-Systems/Shinobi/-/archive/${SHINOBI_HASH_LONG}/Shinobi-${SHINOBI_HASH_LONG}.tar.gz | tar xz -C . --strip-components=1
 
 # Install NodeJS dependencies
 RUN npm i npm@latest -g
 RUN npm install pm2 -g
 RUN npm install
 RUN npm install ffbinaries
+# Install for PTZ controls
+RUN npm install pelcod
 
 # EXPOSE port, config, and videos
 EXPOSE 8080
@@ -206,7 +207,7 @@ cp -r ${PROJECT_ROOT}/files ${WORKDIR}/files
 
 # Run Docker build
 cd ${WORKDIR}
-docker build -t neatori18/shinobi:${SHINOBI_TAG} .
+docker build -t msuossianpe/shinobi:${SHINOBI_TAG} .
 cd ${PROJECT_ROOT}
 
 # Push the image to the registory

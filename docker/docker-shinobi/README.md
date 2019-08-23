@@ -2,6 +2,16 @@
 
 This directory includes files to build a Docker image that supports NVIDIA hardware acceleration and Shinobi
 
+### Contributing
+
+This is how to build a new Docker image:
+
+`build.sh <date> <hash_from_gitlab>`
+
+For example:
+
+`build.sh 062919 840f4953`
+
 ### References
 
 #### Compiling FFMPEG with NVENC_H264

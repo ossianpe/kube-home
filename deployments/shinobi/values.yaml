@@ -5,8 +5,8 @@
 replicaCount: 1
 
 image:
-  repository: neatori18/shinobi
-  tag: 062219_b23498d3
+  repository: msuossianpe/shinobi
+  tag: 082219_4477eef8
 #  tag: 20180711_80260b07
   pullPolicy: IfNotPresent
 
